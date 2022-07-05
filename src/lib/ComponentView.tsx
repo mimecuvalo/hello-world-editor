@@ -1,5 +1,5 @@
 import * as React from "react";
-import ReactDOM from "react-dom";
+import { createRoot, Root } from 'react-dom/client';
 import { ThemeProvider } from "styled-components";
 import { EditorView, Decoration } from "prosemirror-view";
 import Extension from "../lib/Extension";
@@ -20,6 +20,7 @@ export default class ComponentView {
   editor: Editor;
   extension: Extension;
   node: Node;
+  root: Root;
   view: EditorView;
   getPos: () => number;
   decorations: Decoration<{ [key: string]: any }>[];
@@ -57,10 +58,8 @@ export default class ComponentView {
       getPos: this.getPos,
     });
 
-    ReactDOM.render(
-      <ThemeProvider theme={theme}>{children}</ThemeProvider>,
-      this.dom
-    );
+    this.root = createRoot(this.dom!);
+    this.root.render(<ThemeProvider theme={theme}>{children}</ThemeProvider>);
   }
 
   update(node) {
@@ -93,7 +92,7 @@ export default class ComponentView {
 
   destroy() {
     if (this.dom) {
-      ReactDOM.unmountComponentAtNode(this.dom);
+      this.root.unmount();
     }
     this.dom = null;
   }
