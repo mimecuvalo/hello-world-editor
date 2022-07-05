@@ -1,5 +1,5 @@
 {
-  "name": "helloworld-editor",
+  "name": "hello-world-editor",
   "description": "A rich text editor with Markdown shortcuts (forked from Outline/rich-markdown-editor)",
   "version": "12.0.0",
   "main": "dist/index.js",
@@ -116,7 +116,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mimecuvalo/helloworld-editor.git"
+    "url": "git+https://github.com/mimecuvalo/hello-world-editor.git"
   },
   "keywords": [
     "editor",
@@ -126,7 +126,7 @@
   ],
   "author": "Tom Moor <tom.moor@gmail.com>",
   "bugs": {
-    "url": "https://github.com/mimecuvalo/helloworld-editor/issues"
+    "url": "https://github.com/mimecuvalo/hello-world-editor/issues"
   },
-  "homepage": "https://github.com/mimecuvalo/helloworld-editor#readme"
+  "homepage": "https://github.com/mimecuvalo/hello-world-editor#readme"
 }
