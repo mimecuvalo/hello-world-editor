@@ -1,7 +1,7 @@
 {
   "name": "hello-world-editor",
   "description": "A rich text editor with Markdown shortcuts (forked from Outline/rich-markdown-editor)",
-  "version": "12.0.1",
+  "version": "12.0.2",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "license": "BSD-3-Clause",
@@ -83,8 +83,6 @@
     "@types/prosemirror-schema-list": "^1.0.1",
     "@types/prosemirror-state": "^1.2.4",
     "@types/prosemirror-view": "^1.11.4",
-    "@types/react": "^18.0.14",
-    "@types/react-dom": "^18.0.5",
     "@types/refractor": "^2.8.0",
     "@types/styled-components": "^5.1.7",
     "@typescript-eslint/eslint-plugin": "^4.15.2",
