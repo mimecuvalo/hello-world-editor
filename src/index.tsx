@@ -233,6 +233,10 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
     }
   }
 
+  componentWillUnmount() {
+    this.view.destroy();
+  }
+
   componentDidUpdate(prevProps: Props) {
     // Allow changes to the 'value' prop to update the editor from outside
     if (this.props.value && prevProps.value !== this.props.value) {
