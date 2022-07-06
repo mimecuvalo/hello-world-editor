@@ -137,7 +137,10 @@ export default function Prism({ name }) {
         // it render un-highlighted and then trigger a defered render of Prism
         // by updating the plugins metadata
         setTimeout(() => {
-          view.dispatch(view.state.tr.setMeta("prism", { loaded: true }));
+          // @ts-ignore - look at private var to see if editor was destroyed or not.
+          if (view.docView) {
+            view.dispatch(view.state.tr.setMeta("prism", { loaded: true }));
+          }
         }, 10);
       }
       return {};
