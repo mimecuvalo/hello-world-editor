@@ -33,13 +33,14 @@ export default function blockMenuItems(
       icon: ImageIcon,
       keywords: "picture photo",
     },
-    {
-      name: "link",
-      title: dictionary.link,
-      icon: LinkIcon,
-      shortcut: `${mod} k`,
-      keywords: "link url uri href",
-    },
+    // N.B.(mime): Link is weird to have as a block level item.
+    // {
+    //   name: "link",
+    //   title: dictionary.link,
+    //   icon: LinkIcon,
+    //   shortcut: `${mod} k`,
+    //   keywords: "link url uri href",
+    // },
     {
       name: "table",
       title: dictionary.table,
