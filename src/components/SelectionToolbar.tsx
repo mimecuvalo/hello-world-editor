@@ -35,6 +35,11 @@ type Props = {
   onCreateLink?: (title: string) => Promise<string>;
   onShowToast?: (msg: string, code: string) => void;
   view: EditorView;
+  selectionToolbarExtras?: (
+    "em" |
+    "underline" |
+    "heading-extra"
+  )[]
 };
 
 function isVisible(props) {
@@ -193,7 +198,7 @@ export default class SelectionToolbar extends React.Component<Props> {
     } else if (isDividerSelection) {
       items = getDividerMenuItems(state, dictionary);
     } else {
-      items = getFormattingMenuItems(state, isTemplate, dictionary);
+      items = getFormattingMenuItems(state, isTemplate, dictionary, this.props.selectionToolbarExtras);
       isTextSelection = true;
     }
 

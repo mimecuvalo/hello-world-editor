@@ -124,6 +124,14 @@ export default function blockMenuItems(
       attrs: { level: 3 },
     },
     {
+      name: "heading",
+      title: dictionary.h4,
+      keywords: "h4 heading4",
+      icon: Heading4Icon,
+      //shortcut: "^ ⇧ 3",
+      attrs: { level: 4 },
+    },
+    {
       name: "separator",
     },
     {
@@ -149,3 +157,6 @@ export default function blockMenuItems(
     },
   ];
 }
+
+// XXX: temp
+const Heading4Icon = () => <span style={{color: '#4E5C6E'}}>H4</span>

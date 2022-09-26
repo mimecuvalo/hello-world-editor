@@ -1,8 +1,10 @@
 import {
   BoldIcon,
   CodeIcon,
+  ItalicIcon,
   Heading1Icon,
   Heading2Icon,
+  Heading3Icon,
   BlockQuoteIcon,
   LinkIcon,
   StrikethroughIcon,
@@ -19,11 +21,13 @@ import isMarkActive from "../queries/isMarkActive";
 import isNodeActive from "../queries/isNodeActive";
 import { MenuItem } from "../types";
 import baseDictionary from "../dictionary";
+import {FormatUnderlined} from '@mui/icons-material'
 
 export default function formattingMenuItems(
   state: EditorState,
   isTemplate: boolean,
-  dictionary: typeof baseDictionary
+  dictionary: typeof baseDictionary,
+  selectionToolbarExtras?: ("em" | "underline" | "heading-extra")[],
 ): MenuItem[] {
   const { schema } = state;
   const isTable = isInTable(state);
@@ -47,6 +51,20 @@ export default function formattingMenuItems(
       tooltip: dictionary.strong,
       icon: BoldIcon,
       active: isMarkActive(schema.marks.strong),
+    },
+    {
+      name: "em",
+      tooltip: dictionary.em,
+      icon: ItalicIcon,
+      active: isMarkActive(schema.marks.italic),
+      visible: selectionToolbarExtras?.includes("em"),
+    },
+    {
+      name: "underline",
+      tooltip: dictionary.underline,
+      icon: FormatUnderlined,
+      active: isMarkActive(schema.marks.underline),
+      visible: selectionToolbarExtras?.includes("underline"),
     },
     {
       name: "strikethrough",
@@ -86,6 +104,22 @@ export default function formattingMenuItems(
       active: isNodeActive(schema.nodes.heading, { level: 2 }),
       attrs: { level: 2 },
       visible: allowBlocks,
+    },
+    {
+      name: "heading",
+      tooltip: dictionary.subheading,
+      icon: Heading3Icon,
+      active: isNodeActive(schema.nodes.heading, { level: 3 }),
+      attrs: { level: 3 },
+      visible: allowBlocks && selectionToolbarExtras?.includes("heading-extra"),
+    },
+    {
+      name: "heading",
+      tooltip: dictionary.subheading,
+      icon: Heading4Icon,
+      active: isNodeActive(schema.nodes.heading, { level: 4 }),
+      attrs: { level: 4 },
+      visible: allowBlocks && selectionToolbarExtras?.includes("heading-extra"),
     },
     {
       name: "blockquote",
@@ -131,5 +165,8 @@ export default function formattingMenuItems(
       active: isMarkActive(schema.marks.link),
       attrs: { href: "" },
     },
-  ];
+  ].filter(i => !!i);
 }
+
+// XXX: temp
+const Heading4Icon = () => <span style={{color: '#fff'}}>H4</span>

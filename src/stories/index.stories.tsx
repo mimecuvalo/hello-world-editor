@@ -19,9 +19,11 @@ export default {
     onFocus: { action: "focused" },
     onBlur: { action: "blurred" },
     disableExtensions: { control: "array" },
+    selectionToolbarExtras: { control: "array" },
   },
   args: {
     disableExtensions: [],
+    selectionToolbarExtras: [],
   },
 } as Meta;
 
