@@ -38,8 +38,10 @@ type Props = {
   selectionToolbarExtras?: (
     "em" |
     "underline" |
-    "heading-extra"
-  )[]
+    "heading-extra" |
+    "image-custom-width" |
+    "image-unstyled"
+  )[];
 };
 
 function isVisible(props) {
@@ -194,7 +196,7 @@ export default class SelectionToolbar extends React.Component<Props> {
     } else if (rowIndex !== undefined) {
       items = getTableRowMenuItems(state, rowIndex, dictionary);
     } else if (isImageSelection) {
-      items = getImageMenuItems(state, dictionary);
+      items = getImageMenuItems(state, dictionary, this.props.selectionToolbarExtras);
     } else if (isDividerSelection) {
       items = getDividerMenuItems(state, dictionary);
     } else {

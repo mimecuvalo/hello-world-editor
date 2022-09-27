@@ -196,7 +196,8 @@ const Wrapper = styled.div<{
   line-height: 0;
   height: 40px;
   box-sizing: border-box;
-  pointer-events: none;
+  // XXX(mime): why? disabled this.
+  //pointer-events: none;
   white-space: nowrap;
 
   &::before {

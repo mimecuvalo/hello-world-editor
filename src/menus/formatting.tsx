@@ -27,7 +27,13 @@ export default function formattingMenuItems(
   state: EditorState,
   isTemplate: boolean,
   dictionary: typeof baseDictionary,
-  selectionToolbarExtras?: ("em" | "underline" | "heading-extra")[],
+  selectionToolbarExtras?: (
+    "em" |
+    "underline" |
+    "heading-extra" |
+    "image-custom-width" |
+    "image-unstyled"
+  )[],
 ): MenuItem[] {
   const { schema } = state;
   const isTable = isInTable(state);

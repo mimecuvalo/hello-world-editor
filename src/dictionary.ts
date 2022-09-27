@@ -33,6 +33,8 @@ export const base = {
   heading: "Heading",
   hr: "Divider",
   image: "Image",
+  imageCustomWidth: "Image Custom Width",
+  imageUnstyled: "Image Unstyled",
   imageUploadError: "Sorry, an error occurred uploading the image",
   imageCaptionPlaceholder: "Write a caption",
   info: "Info",

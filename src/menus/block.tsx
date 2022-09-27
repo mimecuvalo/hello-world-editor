@@ -128,7 +128,7 @@ export default function blockMenuItems(
       title: dictionary.h4,
       keywords: "h4 heading4",
       icon: Heading4Icon,
-      //shortcut: "^ ⇧ 3",
+      //shortcut: "^ ⇧ 4",
       attrs: { level: 4 },
     },
     {

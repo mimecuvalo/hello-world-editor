@@ -10,17 +10,28 @@ import isNodeActive from "../queries/isNodeActive";
 import { MenuItem } from "../types";
 import baseDictionary from "../dictionary";
 import { EditorState } from "prosemirror-state";
+import {Slider as MuiSlider} from '@mui/material'
 
 export default function imageMenuItems(
   state: EditorState,
-  dictionary: typeof baseDictionary
+  dictionary: typeof baseDictionary,
+  selectionToolbarExtras?: (
+    "em" |
+    "underline" |
+    "heading-extra" |
+    "image-custom-width" |
+    "image-unstyled"
+  )[],
 ): MenuItem[] {
   const { schema } = state;
   const isLeftAligned = isNodeActive(schema.nodes.image, {
-    layoutClass: "left-50",
+    layoutClass: "align-left",
   });
   const isRightAligned = isNodeActive(schema.nodes.image, {
-    layoutClass: "right-50",
+    layoutClass: "align-right",
+  });
+  const isUnstyled = isNodeActive(schema.nodes.image, {
+    unstyled: "unstyled",
   });
 
   return [
@@ -53,6 +64,23 @@ export default function imageMenuItems(
       visible: true,
     },
     {
+      name: "imageCustomWidth",
+      tooltip: dictionary.imageCustomWidth,
+      component: Slider,
+      visible: selectionToolbarExtras?.includes("image-custom-width"),
+    },
+    {
+      name: "imageUnstyled",
+      tooltip: dictionary.imageUnstyled,
+      icon: ImageUnstyled,
+      visible: selectionToolbarExtras?.includes("image-unstyled"),
+      active: isUnstyled,
+    },
+    {
+      name: "separator",
+      visible: selectionToolbarExtras?.includes("image-custom-width") || selectionToolbarExtras?.includes("image-unstyled"),
+    },
+    {
       name: "downloadImage",
       tooltip: dictionary.downloadImage,
       icon: DownloadIcon,
@@ -75,3 +103,19 @@ export default function imageMenuItems(
     },
   ];
 }
+
+const Slider = ({value, onChangeCommitted}) => {
+  return (
+    <MuiSlider
+      onChangeCommitted={onChangeCommitted}
+      defaultValue={value ? parseInt(value) : 50}
+      step={10}
+      min={30}
+      max={70}
+      sx={{ minWidth: '60px', margin: '-3px 10px'}}
+    />
+  )
+}
+
+// XXX: temp
+const ImageUnstyled = () => <span style={{color: '#fff'}}>U</span>

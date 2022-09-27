@@ -156,8 +156,10 @@ export type Props = {
   selectionToolbarExtras?: (
     "em" |
     "underline" |
-    "heading-extra"
-  )[]
+    "heading-extra" |
+    "image-custom-width" |
+    "image-unstyled"
+  )[];
 };
 
 type State = {
@@ -785,6 +787,7 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
                   onCreateLink={this.props.onCreateLink}
                   tooltip={tooltip}
                   selectionToolbarExtras={this.props.selectionToolbarExtras}
+                  imageToolbarExtras={this.props.imageToolbarExtras}
                 />
                 <LinkToolbar
                   view={this.view}

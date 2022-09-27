@@ -35,6 +35,7 @@ export const StyledEditor = styled("div")<{
   .image {
     text-align: center;
     max-width: 100%;
+    width: 50%;
     clear: both;
 
     img {
@@ -65,20 +66,40 @@ export const StyledEditor = styled("div")<{
     }
   }
 
-  .image-right-50 {
+  .image-align-center {
+    margin: 0 auto;
+  }
+
+  .image-align-right {
     float: right;
-    width: 50%;
+    text-align: right;
     margin-left: 2em;
     margin-bottom: 1em;
     clear: initial;
   }
 
-  .image-left-50 {
+  .image-align-left {
     float: left;
-    width: 50%;
+    text-align: left;
     margin-right: 2em;
     margin-bottom: 1em;
     clear: initial;
+  }
+
+  .image-width-30 {
+    width: 30%;
+  }
+  .image-width-40 {
+    width: 40%;
+  }
+  .image-width-50 {
+    width: 50%;
+  }
+  .image-width-60 {
+    width: 60%;
+  }
+  .image-width-70 {
+    width: 70%;
   }
 
   .ProseMirror-hideselection *::selection {

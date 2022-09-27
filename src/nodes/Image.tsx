@@ -83,12 +83,18 @@ const uploadPlugin = options =>
     },
   });
 
-const IMAGE_CLASSES = ["right-50", "left-50"];
+const IMAGE_CLASSES = ["right-50" /* legacy */, "left-50" /* legacy */, "align-right", "align-left", "width-30", "width-40", "width-50", "width-60", "width-70", "unstyled"];
 const getLayoutAndTitle = tokenTitle => {
   if (!tokenTitle) return {};
-  if (IMAGE_CLASSES.includes(tokenTitle)) {
+  const tokens = tokenTitle.split(' ');
+  if (IMAGE_CLASSES.includes(tokens[0])) {
+    const isAlignRight = tokens.includes('align-right') || tokens.includes('right-50');
+    const isAlignLeft = tokens.includes('align-left') || tokens.includes('left-50');
+
     return {
-      layoutClass: tokenTitle,
+      layoutClass: isAlignRight ? 'align-right' : isAlignLeft ? 'align-left' : 'align-center',
+      width: tokens.find(t => t.startsWith('width-')) ? tokens.find(t => t.startsWith('width-')) : null,
+      unstyled: tokens.includes('unstyled') ? 'unstyled' : null,
     };
   } else {
     return {
@@ -131,6 +137,12 @@ export default class Image extends Node {
         layoutClass: {
           default: null,
         },
+        unstyled: {
+          default: null,
+        },
+        width: {
+          default: null,
+        },
         title: {
           default: null,
         },
@@ -146,16 +158,19 @@ export default class Image extends Node {
           getAttrs: (dom: HTMLDivElement) => {
             const img = dom.getElementsByTagName("img")[0];
             const className = dom.className;
-            const layoutClassMatched =
-              className && className.match(/image-(.*)$/);
-            const layoutClass = layoutClassMatched
-              ? layoutClassMatched[1]
-              : null;
+            const layoutClassMatched = className ? className.match(/image-(align-\S*)/) : null;
+            const layoutClass = layoutClassMatched ? layoutClassMatched[1] : 'align-center';
+            const unstyledMatched = className ? className.match(/image-(unstyled)/) : null;
+            const unstyled = widthMatched ? unstyledMatched[1] : null;
+            const widthMatched = className ? className.match(/image-(width-\S*)/) : null;
+            const width = widthMatched ? widthMatched[1] : null;
             return {
               src: img?.getAttribute("src"),
               alt: img?.getAttribute("alt"),
               title: img?.getAttribute("title"),
-              layoutClass: layoutClass,
+              layoutClass,
+              width,
+              unstyled
             };
           },
         },
@@ -171,9 +186,10 @@ export default class Image extends Node {
         },
       ],
       toDOM: node => {
-        const className = node.attrs.layoutClass
-          ? `image image-${node.attrs.layoutClass}`
-          : "image";
+        let className = 'image'
+        className += node.attrs.layoutClass ? ' image-' + node.attrs.layoutClass : ' image-align-center';
+        className += node.attrs.width ? ' image-' + node.attrs.width : '';
+        className += node.attrs.unstyled ? ' image-' + node.attrs.unstyled : '';
         return [
           "div",
           {
@@ -215,7 +231,7 @@ export default class Image extends Node {
 
   handleBlur = ({ node, getPos }) => event => {
     const alt = event.target.innerText;
-    const { src, title, layoutClass } = node.attrs;
+    const { src, title, layoutClass, width, unstyled } = node.attrs;
 
     if (alt === node.attrs.alt) return;
 
@@ -229,6 +245,8 @@ export default class Image extends Node {
       alt,
       title,
       layoutClass,
+      width,
+      unstyled
     });
     view.dispatch(transaction);
   };
@@ -250,8 +268,11 @@ export default class Image extends Node {
 
   component = props => {
     const { theme, isSelected } = props;
-    const { alt, src, title, layoutClass } = props.node.attrs;
-    const className = layoutClass ? `image image-${layoutClass}` : "image";
+    const { alt, src, title, layoutClass, width, unstyled } = props.node.attrs;
+    let className = 'image'
+    className += layoutClass ? ` image-${layoutClass}` : ' image-align-center';
+    className += width ? ` image-${width}` : '';
+    className += unstyled ? ` image-${unstyled}` : '';
 
     return (
       <div contentEditable={false} className={className}>
@@ -301,8 +322,8 @@ export default class Image extends Node {
       state.esc((node.attrs.alt || "").replace("\n", "") || "") +
       "](" +
       state.esc(node.attrs.src);
-    if (node.attrs.layoutClass) {
-      markdown += ' "' + state.esc(node.attrs.layoutClass) + '"';
+    if (node.attrs.layoutClass || node.attrs.width || node.attrs.unstyled) {
+      markdown += ' "' + state.esc(node.attrs.layoutClass) + " " + state.esc(node.attrs.width) + " " + state.esc(node.attrs.unstyled) + '"';
     } else if (node.attrs.title) {
       markdown += ' "' + state.esc(node.attrs.title) + '"';
     }
@@ -344,7 +365,7 @@ export default class Image extends Node {
         const attrs = {
           ...state.selection.node.attrs,
           title: null,
-          layoutClass: "right-50",
+          layoutClass: "align-right",
         };
         const { selection } = state;
         dispatch(state.tr.setNodeMarkup(selection.from, undefined, attrs));
@@ -354,7 +375,7 @@ export default class Image extends Node {
         const attrs = {
           ...state.selection.node.attrs,
           title: null,
-          layoutClass: "left-50",
+          layoutClass: "align-left",
         };
         const { selection } = state;
         dispatch(state.tr.setNodeMarkup(selection.from, undefined, attrs));
@@ -391,7 +412,7 @@ export default class Image extends Node {
         inputElement.click();
       },
       alignCenter: () => (state, dispatch) => {
-        const attrs = { ...state.selection.node.attrs, layoutClass: null };
+        const attrs = { ...state.selection.node.attrs, layoutClass: 'align-center' };
         const { selection } = state;
         dispatch(state.tr.setNodeMarkup(selection.from, undefined, attrs));
         return true;
@@ -404,6 +425,26 @@ export default class Image extends Node {
         const node = type.create(attrs);
         const transaction = state.tr.insert(position, node);
         dispatch(transaction);
+        return true;
+      },
+      imageUnstyled: () => (state, dispatch) => {
+        const attrs = {
+          ...state.selection.node.attrs,
+          title: null,
+          unstyled: state.selection.node.attrs.unstyled ? null : 'unstyled',
+        };
+        const { selection } = state;
+        dispatch(state.tr.setNodeMarkup(selection.from, undefined, attrs));
+        return true;
+      },
+      imageCustomWidth: newValue => (state, dispatch) => {
+        const attrs = {
+          ...state.selection.node.attrs,
+          title: null,
+          width: `width-${newValue}`,
+        };
+        const { selection } = state;
+        dispatch(state.tr.setNodeMarkup(selection.from, undefined, attrs));
         return true;
       },
     };
